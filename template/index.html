@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>System Monitoring</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .plotly-graph-div {
+            margin: auto;
+            width: 50%;
+            background-color: rgba(151, 128, 128, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .alert {
+            margin: 20px auto;
+            padding: 15px;
+            width: 50%;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>System Monitoring</h1>
+        
+        <div id="cpu-gauge" class="plotly-graph-div"></div>
+        <div id="mem-gauge" class="plotly-graph-div"></div>
+
+        <!-- Alert Message -->
+        <div id="alert" class="alert" style="display: none;"></div>
+    </div>
+    
+    <script>
+        // Replace these with actual dynamic values passed from the backend
+        const cpuMetric = 65; // Example value
+        const memMetric = 75; // Example value
+
+        // Optional: Alert message setup (if any issue arises)
+        const alertMessage = ""; // Replace with a backend-provided message
+        if (alertMessage) {
+            const alertDiv = document.getElementById('alert');
+            alertDiv.style.display = 'block';
+            alertDiv.textContent = alertMessage;
+        }
+
+        // Gauge configurations for CPU
+        const cpuGauge = {
+            type: "indicator",
+            mode: "gauge+number",
+            value: cpuMetric,
+            gauge: {
+                axis: { range: [0, 100] },
+                bar: { color: "#1f77b4" },
+                bgcolor: "white",
+                borderwidth: 2,
+                bordercolor: "#ccc",
+                steps: [
+                    { range: [0, 50], color: "#d9f0a3" },
+                    { range: [50, 85], color: "#ffeb84" },
+                    { range: [85, 100], color: "#ff5f5f" }
+                ],
+                threshold: {
+                    line: { color: "red", width: 4 },
+                    thickness: 0.75,
+                    value: cpuMetric
+                }
+            }
+        };
+
+        // Gauge configurations for Memory
+        const memGauge = {
+            type: "indicator",
+            mode: "gauge+number",
+            value: memMetric,
+            gauge: {
+                axis: { range: [0, 100] },
+                bar: { color: "#1f77b4" },
+                bgcolor: "white",
+                borderwidth: 2,
+                bordercolor: "#ccc",
+                steps: [
+                    { range: [0, 50], color: "#d9f0a3" },
+                    { range: [50, 85], color: "#ffeb84" },
+                    { range: [85, 100], color: "#ff5f5f" }
+                ],
+                threshold: {
+                    line: { color: "red", width: 4 },
+                    thickness: 0.75,
+                    value: memMetric
+                }
+            }
+        };
+
+        // Layouts
+        const cpuGaugeLayout = { title: "CPU Utilization" };
+        const memGaugeLayout = { title: "Memory Utilization" };
+
+        // Render plots
+        Plotly.newPlot('cpu-gauge', [cpuGauge], cpuGaugeLayout);
+        Plotly.newPlot('mem-gauge', [memGauge], memGaugeLayout);
+    </script>
+</body>
+</html>
